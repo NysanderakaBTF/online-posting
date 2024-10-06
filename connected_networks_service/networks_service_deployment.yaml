@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: networks-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: networks-service
+  template:
+    metadata:
+      labels:
+        app: networks-service
+    spec:
+      containers:
+      - name: networks-service
+        image: foxxx614/posting-connet-service
+        ports:
+        - containerPort: 8000

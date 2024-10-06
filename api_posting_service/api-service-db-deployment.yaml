@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-service-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-service-db
+  template:
+    metadata:
+      labels:
+        app: api-service-db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:13
+        env:
+          - name: POSTGRES_DB
+            value: api_service_db
+          - name: POSTGRES_USER
+            value: postgres
+          - name: POSTGRES_PASSWORD
+            value: postgres
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: api-service-db-storage
+      volumes:
+        - name: api-service-db-storage
+          persistentVolumeClaim:
+            claimName: template-service-pvc
