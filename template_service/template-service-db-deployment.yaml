@@ -27,6 +27,7 @@ spec:
         volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: template-service-db-storage
+            subPath: template
       volumes:
         - name: template-service-db-storage
           persistentVolumeClaim:

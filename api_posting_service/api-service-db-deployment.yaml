@@ -27,6 +27,7 @@ spec:
         volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: api-service-db-storage
+            subPath: api
       volumes:
         - name: api-service-db-storage
           persistentVolumeClaim:

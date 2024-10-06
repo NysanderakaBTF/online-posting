@@ -27,6 +27,7 @@ spec:
         volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: queue-service-db-storage
+            subPath: queue
       volumes:
         - name: queue-service-db-storage
           persistentVolumeClaim:
