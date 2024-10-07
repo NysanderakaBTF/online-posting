@@ -2,12 +2,16 @@ import uuid
 
 import requests
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.http import JsonResponse
 from django.utils.deprecation import MiddlewareMixin
 
+from authentication.user import CustomUser
+
+
 class JWTAuthenticationMiddleware(MiddlewareMixin):
     def __init__(self, get_response=None):
-        self.get_response = get_response
+        super().__init__(get_response)
         self.user_service_url = settings.USER_SERVICE_URL
 
     def process_request(self, request):
@@ -45,8 +49,9 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         except requests.exceptions.RequestException:
             return JsonResponse({'detail': 'Authentication service unavailable.'}, status=503)
 
-
         user_data = response.json()
-        user_data.setdefault('is_authenticated', True)
-        request.user = user_data
-        return None
+        if user_data:
+            request.user = CustomUser(user_data)
+        else:
+            request.user = AnonymousUser()
+        return self.get_response(request)
