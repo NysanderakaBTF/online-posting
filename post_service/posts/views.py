@@ -1,4 +1,6 @@
 import requests
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -7,7 +9,7 @@ from rest_framework.response import Response
 from posts.models import Post, Block
 from posts.serializers import PostSerializer, BlockSerializer
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
@@ -36,6 +38,7 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(status=status.HTTP_403_FORBIDDEN)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class BlockViewSet(viewsets.ModelViewSet):
     serializer_class = BlockSerializer
     permission_classes = [IsAuthenticated]

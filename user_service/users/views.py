@@ -1,10 +1,12 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 
 from users.models import User
 from users.serializers import UserSerializer
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer

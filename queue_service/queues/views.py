@@ -1,11 +1,13 @@
 from queue import Queue
 
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class AddPostToQueue(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
@@ -15,7 +17,7 @@ class AddPostToQueue(APIView):
         queue.post_ids.append(post_id)
         queue.save()
         return Response({'status': 'Post added to queue'})
-
+@method_decorator(csrf_exempt, name='dispatch')
 class GetFirstPost(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -24,7 +26,7 @@ class GetFirstPost(APIView):
         if queue and queue.post_ids:
             return Response({'post_id': queue.post_ids[0]})
         return Response({'post_id': None})
-
+@method_decorator(csrf_exempt, name='dispatch')
 class DeleteFirstPost(APIView):
     permission_classes = [IsAuthenticated]
     def delete(self, request):

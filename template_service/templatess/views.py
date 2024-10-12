@@ -2,6 +2,8 @@ import re
 
 import requests
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -11,7 +13,7 @@ from templatess.models import Template, Block
 from templatess.serializers import TemplateSerializer, BlockSerializer
 import xml.etree.ElementTree as ET
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class BlockViewSet(viewsets.ModelViewSet):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
@@ -21,11 +23,15 @@ class BlockViewSet(viewsets.ModelViewSet):
         return Block.objects.filter(template__user_id=request.user.id)
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class TemplateViewSet(viewsets.ModelViewSet):
     serializer_class = TemplateSerializer
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
+        print(self.request.user.__dict__)
+        a = Template.objects.filter(user_id=self.request.user.id)
+        for i in a:
+            print(i.__dict__)
         return Template.objects.filter(user_id=self.request.user.id)
 
     @action(detail=False, methods=['get'])

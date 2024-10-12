@@ -130,3 +130,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 USER_SERVICE_URL = 'http://user-service:8000'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'authentication.auth_class.JWTMicroserviceAuthenticator',
+    ]
+}
